@@ -1,4 +1,4 @@
-import os
+import subprocess as sub
 
 descriptors = list()
 
@@ -6,14 +6,15 @@ def getString():
     test_file = "nvidia-smi -q --gpu=0"
  
     try:
-        p = os.popen(test_file, 'r')
-        return p.read()
+        p = sub.Popen(test_file, stdout=sub.PIPE, stderr=sub.PIPE)
+        out, err = p.communicate()
+        return out
  
     except IOError:
         return "Error"
 
 def readl(key):
-    output=getString()
+    output=str(getString(), encoding='utf8')
     splittedoutput=output.split('\n')
     for line in splittedoutput:
         line=line.strip()
